@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import tutorials.base.fixture.Fixtures
 import tutorials.config.AbstractContainerTest
-import tutorials.config.InfluxDbTestContainerConfig
+import tutorials.config.InfluxDb2TestContainerConfig
 import tutorials.measurement.MeasurementConst.SIMPLE
 import tutorials.measurement.Sensor
 import java.time.Instant
@@ -37,8 +37,8 @@ class InfluxDbTest : AbstractContainerTest() {
 
     @BeforeEach
     fun setup() {
-      writeApi = influxDbClient.writeApiBlocking
-      queryApi = influxDbClient.queryApi
+      writeApi = influxDb2Client.writeApiBlocking
+      queryApi = influxDb2Client.queryApi
     }
 
     @Test
@@ -93,8 +93,8 @@ class InfluxDbTest : AbstractContainerTest() {
 
     @BeforeEach
     fun setup() {
-      writeReactiveApi = influxDBClientReactive.writeReactiveApi
-      reactiveQueryApi = influxDBClientReactive.queryReactiveApi
+      writeReactiveApi = influxDB2ClientReactive.writeReactiveApi
+      reactiveQueryApi = influxDB2ClientReactive.queryReactiveApi
     }
 
     @Test
@@ -162,7 +162,7 @@ class InfluxDbTest : AbstractContainerTest() {
       Restrictions.tag("country").equal(measurement.country),
     )
 
-    return Flux.from(InfluxDbTestContainerConfig.Companion.BUCKET)
+    return Flux.from(InfluxDb2TestContainerConfig.Companion.BUCKET)
       .range(getInstant(-1), getInstant(0))
       .filter(restrictions)
       .sort(listOf("_time"))

@@ -30,9 +30,13 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+  // influxdb 2
   implementation("com.influxdb:influxdb-client-java:$influxDbVersion")
   implementation("com.influxdb:influxdb-client-reactive:$influxDbVersion")
   implementation("com.influxdb:flux-dsl:$influxDbVersion")
+
+  // influxdb 3
+  implementation("com.influxdb:influxdb3-java:1.3.0")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")

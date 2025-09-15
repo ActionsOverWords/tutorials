@@ -15,6 +15,18 @@ services:
     volumes:
       - influxdb2_data:/var/lib/influxdb2
       - influxdb2_config:/etc/influxdb2
+
+  influxdb3-core:
+    container_name: influxdb3
+    image: influxdb:3-core
+    ports:
+      - "8181:8181"
+    command:
+      - influxdb3
+      - serve
+      - --node-id=node0
+      - --object-store=memory
+
 volumes:
   influxdb2_data:
   influxdb2_config:

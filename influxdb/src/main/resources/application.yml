@@ -8,7 +8,7 @@ spring:
       lifecycle-management: start-and-stop
       file: ${projectRootDir}/compose.yml
 
-influxdb:
+influxdb2:
   url: http://localhost:8086
   token: actionsoverwords
   org: ActionsOverWords

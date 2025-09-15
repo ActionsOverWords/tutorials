@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 
 @Validated
-@ConfigurationProperties(prefix = "influxdb")
-class InfluxDbProperties {
+@ConfigurationProperties(prefix = "influxdb2")
+class InfluxDb2Properties {
   @NotBlank lateinit var url: String
   @NotBlank lateinit var token: String
   @NotBlank lateinit var org: String
@@ -21,11 +21,11 @@ class InfluxDbProperties {
 }
 
 @Configuration
-@EnableConfigurationProperties(InfluxDbProperties::class)
-class InfluxConfig {
+@EnableConfigurationProperties(InfluxDb2Properties::class)
+class InfluxDb2Config {
 
   @Bean(destroyMethod = "close")
-  fun influxDBClient(properties: InfluxDbProperties): InfluxDBClient {
+  fun influxDB2Client(properties: InfluxDb2Properties): InfluxDBClient {
     return InfluxDBClientFactory.create(
       properties.url,
       properties.token.toCharArray(),
@@ -35,7 +35,7 @@ class InfluxConfig {
   }
 
   @Bean(destroyMethod = "close")
-  fun influxDBClientReactive(properties: InfluxDbProperties): InfluxDBClientReactive {
+  fun influxDB2ClientReactive(properties: InfluxDb2Properties): InfluxDBClientReactive {
     return InfluxDBClientReactiveFactory.create(
       properties.url,
       properties.token.toCharArray(),
