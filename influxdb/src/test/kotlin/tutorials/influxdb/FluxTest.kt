@@ -1,4 +1,4 @@
-package tutorials.influxdb2
+package tutorials.influxdb
 
 import com.influxdb.client.QueryApi
 import com.influxdb.client.WriteApiBlocking
@@ -18,10 +18,10 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
+import tutorials.base.consts.MeasurementConst.SIMPLE
 import tutorials.base.fixture.Fixtures
 import tutorials.config.AbstractContainerTest
-import tutorials.config.InfluxDb2TestContainerConfig
-import tutorials.measurement.MeasurementConst.SIMPLE
+import tutorials.config.InfluxDb2TestContainerConfig.Companion.BUCKET
 import tutorials.measurement.Sensor
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -93,8 +93,8 @@ class InfluxDbTest : AbstractContainerTest() {
 
     @BeforeEach
     fun setup() {
-      writeReactiveApi = influxDB2ClientReactive.writeReactiveApi
-      reactiveQueryApi = influxDB2ClientReactive.queryReactiveApi
+      writeReactiveApi = influxDb2ClientReactive.writeReactiveApi
+      reactiveQueryApi = influxDb2ClientReactive.queryReactiveApi
     }
 
     @Test
@@ -162,7 +162,7 @@ class InfluxDbTest : AbstractContainerTest() {
       Restrictions.tag("country").equal(measurement.country),
     )
 
-    return Flux.from(InfluxDb2TestContainerConfig.Companion.BUCKET)
+    return Flux.from(BUCKET)
       .range(getInstant(-1), getInstant(0))
       .filter(restrictions)
       .sort(listOf("_time"))

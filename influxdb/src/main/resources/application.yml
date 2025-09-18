@@ -16,5 +16,5 @@ influxdb2:
 
 logging:
   level:
-    org.testcontainers: error
+    org.testcontainers: trace
     tutorials: debug

@@ -9,7 +9,7 @@ plugins {
 
 group = "tutorials"
 version = "0.0.1-SNAPSHOT"
-description = "influxdb"
+description = "influxdb3"
 
 java {
   toolchain {
@@ -21,34 +21,27 @@ repositories {
   mavenCentral()
 }
 
-private val influxDbVersion = "7.3.0"
+private val influxDb3Version = "1.4.0"
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-validation")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-  // influxdb 2
-  implementation("com.influxdb:influxdb-client-java:$influxDbVersion")
-  implementation("com.influxdb:influxdb-client-reactive:$influxDbVersion")
-  implementation("com.influxdb:flux-dsl:$influxDbVersion")
+  // influxdb 3
+  implementation("com.influxdb:influxdb3-java:$influxDb3Version")
+
+  developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")
   }
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-  developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-
   testImplementation("org.springframework.boot:spring-boot-testcontainers")
   testImplementation("org.testcontainers:junit-jupiter")
-  testImplementation("org.testcontainers:influxdb")
-  testImplementation("org.influxdb:influxdb-java:2.25")
 
-  testImplementation("io.projectreactor:reactor-test")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 project.afterEvaluate {
@@ -64,14 +57,21 @@ kotlin {
 }
 
 tasks{
-  withType<Test> {
+  test {
     useJUnitPlatform()
+    jvmArgs(
+      "--add-opens", "java.base/java.nio=ALL-UNNAMED",
+      "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
+    )
+  }
 
+  withType<Test> {
     testLogging {
       showStandardStreams = true
       exceptionFormat = FULL
     }
   }
+
   processResources {
     filesMatching("**/application.yml") {
       expand(project.properties)

@@ -1,0 +1,15 @@
+### CPU 사용량 저장
+POST http://localhost:8080/cpu_usage
+Content-Type: application/json
+Accept: application/json
+
+{
+  "architecture": "m4",
+  "usage": 12
+}
+
+### CPU 조회
+GET http://localhost:8080/cpu_usage?architecture=m1
+Accept: application/json
+
+###

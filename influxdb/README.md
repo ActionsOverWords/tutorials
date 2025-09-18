@@ -82,13 +82,13 @@ volumes:
   influxdb2_config:
 ```
 
-### 4.2. InfluxDB 3
+### 4.2. [InfluxDB 3](https://hub.docker.com/_/influxdb)
 ```yaml
 name: influxdb3
 services:
   influxdb3-core:
     container_name: influxdb3-core
-    image: influxdb:3-core
+    image: influxdb:3.4.2-core
     ports:
       - 8181:8181
     command:
@@ -98,12 +98,47 @@ services:
       - --object-store=file
       - --data-dir=/var/lib/influxdb3/data
       - --plugin-dir=/var/lib/influxdb3/plugins
-    volumes:
-      - type: bind
-        source: $PWD/influxdb3/core/data
-        target: /var/lib/influxdb3/data
-      - type: bind
-        source: $PWD/influxdb3/core/plugins
-        target: /var/lib/influxdb3/plugins
-
 ```
+- volumes mount 시 에러
+```text
+$ docker logs -n 100 influxdb3
+2025-09-15T01:22:15.689879Z  INFO influxdb3_lib::commands::serve: InfluxDB 3 Core server starting node_id=node0 git_hash=571299afed3644c69811df9a71816446af64dec0 version=3.4.2 uuid=d965a83d-28a0-4058-b783-59835f376213 num_cpus=4
+2025-09-15T01:22:15.690107Z  INFO influxdb3_clap_blocks::object_store: Object Store db_dir="/var/lib/influxdb3/data" object_store_type="Directory"
+2025-09-15T01:22:15.690363Z  INFO influxdb3_lib::commands::serve: Creating shared query executor num_threads=4
+2025-09-15T01:22:15.731975Z  INFO influxdb3_catalog::object_store::versions::v2: catalog not found, creating a new one catalog_uuid=8e720d94-7602-4581-90f4-114f939e4b18
+2025-09-15T01:22:15.732936Z ERROR influxdb3_catalog::object_store::versions::v2: failed to persist catalog checkpoint file error=Generic { store: "LocalFileSystem", source: UnableToCreateDir { source: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }, path: "/var/lib/influxdb3/data/node0/catalog/v2" } }
+2025-09-15T01:22:15.733417Z  WARN executor: DedicatedExecutor dropped without calling shutdown()
+2025-09-15T01:22:15.733427Z  WARN executor: DedicatedExecutor dropped without waiting for worker termination
+2025-09-15T01:22:15.733878Z  WARN executor: DedicatedExecutor dropped without calling shutdown()
+2025-09-15T01:22:15.733896Z  WARN executor: DedicatedExecutor dropped without waiting for worker termination
+2025-09-15T01:22:15.734209Z  INFO influxdb3_cache::parquet_cache: cache request handler closed
+Serve command failed: failed to initialize catalog: object store error: ObjectStore(Generic { store: "LocalFileSystem", source: UnableToCreateDir { source: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }, path: "/var/lib/influxdb3/data/node0/catalog/v2" } })
+❯ 
+```
+
+
+## 5. [Using libraries](https://docs.influxdata.com/influxdb/v2/api-guide/client-libraries/)
+
+### 5.1 [org.influxdb:influxdb-java](https://github.com/influxdata/influxdb-java)
+- 구 버전 lib
+- 해당 버전 사용 시 unauthorized 에러 발생
+
+### 5.2 com.influxdb:influxdb-client-java
+- [com.influxdb:influxdb-client-java](https://github.com/influxdata/influxdb-client-java)
+- [com.influxdb:flux-dsl](https://github.com/influxdata/influxdb-client-java/tree/master/flux-dsl)
+    - Flux dsl 지원
+    - query 쉽게 작성
+- [com.influxdb:influxdb-client-reactive](https://github.com/influxdata/influxdb-client-java/tree/master/client-reactive)
+    - support reactive
+- [sample code](https://github.com/influxdata/influxdb-client-java/tree/master/examples/src/main/java/example)
+    - GitHub에 정리 잘되어 있음
+
+### 5.3. Integration with spring framework
+- 아직까지 없음
+- [spring-data-influxdb](https://github.com/miwurster/spring-data-influxdb)
+    - 공식 lib 아님
+    - 개인이 만들어 버전업이 늦고 InfluxDB에서 잘 만들어놔서 필요성이 적어보임
+
+## 6. Kick
+### `in`절 속도 개선
+- sql과 다르게 `or`가 빠름

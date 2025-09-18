@@ -1,13 +1,12 @@
-package tutorials.config
+package tutorials.influxdb3.config
 
-import com.influxdb.client.InfluxDBClient
-import com.influxdb.client.reactive.InfluxDBClientReactive
+import com.influxdb.v3.client.InfluxDBClient
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestConstructor
 import org.testcontainers.junit.jupiter.Testcontainers
-import tutorials.base.extentions.logger
+import tutorials.influxdb3.base.extentions.logger
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
@@ -15,13 +14,15 @@ abstract class AbstractIntegrationTest {
   val log = logger()
 }
 
+@Deprecated("TestContainer 실행 안됨")
 @Testcontainers
-@Import(InfluxDb2TestContainerConfig::class)
+//@Import(InfluxDB3TestContainerConfig::class)
 abstract class AbstractContainerTest : AbstractIntegrationTest() {
   @Autowired
-  lateinit var influxDb2Client: InfluxDBClient
+  lateinit var influxDbClient: InfluxDBClient
 
-  @Autowired
-  lateinit var influxDb2ClientReactive: InfluxDBClientReactive
+  @BeforeEach
+  fun setup() {
+  }
 
 }

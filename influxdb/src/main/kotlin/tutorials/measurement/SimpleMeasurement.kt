@@ -2,7 +2,7 @@ package tutorials.measurement
 
 import com.influxdb.annotations.Column
 import com.influxdb.annotations.Measurement
-import tutorials.measurement.MeasurementConst.SIMPLE
+import tutorials.base.consts.MeasurementConst.SIMPLE
 import java.time.Instant
 
 @Measurement(name = SIMPLE)
