@@ -1,0 +1,15 @@
+### [SDK] CPU 사용량 저장
+POST http://localhost:8080/cpu_usage/sdk
+Content-Type: application/json
+Accept: application/json
+
+{
+  "architecture": "x86",
+  "usage": 11
+}
+
+### [SDK] CPU 조회
+GET http://localhost:8080/cpu_usage/sdk?architecture=windows
+Accept: application/json
+
+###

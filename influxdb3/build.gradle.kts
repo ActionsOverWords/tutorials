@@ -22,6 +22,7 @@ repositories {
 }
 
 private val influxDb3Version = "1.4.0"
+private val apacheArrowVersion = "18.3.0"
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
@@ -31,6 +32,11 @@ dependencies {
 
   // influxdb 3
   implementation("com.influxdb:influxdb3-java:$influxDb3Version")
+
+  // Apache Arrow Flight
+  implementation("org.springframework.boot:spring-boot-starter-jdbc")
+  implementation("org.apache.arrow:flight-sql-jdbc-driver:$apacheArrowVersion")
+  implementation("org.apache.arrow:flight-core:$apacheArrowVersion")
 
   developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 

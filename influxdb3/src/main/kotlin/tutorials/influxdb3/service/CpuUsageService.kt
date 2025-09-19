@@ -1,48 +1,31 @@
 package tutorials.influxdb3.service
 
-import com.influxdb.v3.client.InfluxDBClient
 import org.springframework.stereotype.Service
-import tutorials.influxdb3.base.extentions.logger
 import tutorials.influxdb3.dto.CpuUsageQueryRequest
 import tutorials.influxdb3.dto.CpuUsageQueryResponse
 import tutorials.influxdb3.dto.CpuUsageSaveRequest
-import kotlin.streams.asSequence
+import tutorials.influxdb3.repository.CpuUsageRepository
 
 @Service
 class CpuUsageService(
-  val influxDBClient: InfluxDBClient,
+  val sdkCpuUsageRepository: CpuUsageRepository,
+  val apacheArrowCpuUsageRepository: CpuUsageRepository,
 ) {
 
-  val log = logger()
-
-  fun write(request: CpuUsageSaveRequest) {
-    val record = request.toLineProtocol()
-    log.debug("record: {}", record)
-
-    influxDBClient.writeRecord(record)
+  fun writeBySdk(request: CpuUsageSaveRequest) {
+    sdkCpuUsageRepository.save(request.toMeasurement())
   }
 
-  fun list(request: CpuUsageQueryRequest): List<CpuUsageQueryResponse> {
-    log.debug("request: {}", request)
+  fun listBySdk(request: CpuUsageQueryRequest): List<CpuUsageQueryResponse> {
+    return sdkCpuUsageRepository.findRecents(request)
+  }
 
-    val query = """
-      SELECT *
-      FROM cpu_usage
-      ${request.toWhereClause()}
-      ORDER BY time ${request.order}
-      LIMIT ${request.pageSize}
-    """.trimIndent()
+  fun writeByArrow(request: CpuUsageSaveRequest) {
+    apacheArrowCpuUsageRepository.save(request.toMeasurement())
+  }
 
-    log.debug("query: {}", query)
-
-    return influxDBClient.queryRows(query)
-      .use { row ->
-        row.asSequence()
-          .map { record ->
-            CpuUsageQueryResponse.fromRecord(record)
-          }
-          .toList()
-      }
+  fun listByArrow(request: CpuUsageQueryRequest): List<CpuUsageQueryResponse> {
+    return apacheArrowCpuUsageRepository.findRecents(request)
   }
 
 }

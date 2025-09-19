@@ -1,0 +1,15 @@
+### [Apache Arrow] CPU 사용량 저장
+POST http://localhost:8080/cpu_usage/arrow
+Content-Type: application/json
+Accept: application/json
+
+{
+  "architecture": "m1",
+  "usage": 38
+}
+
+### [Apache Arrow] CPU 조회
+GET http://localhost:8080/cpu_usage/arrow?architecture=windows
+Accept: application/json
+
+###

@@ -13,10 +13,9 @@ data class CpuUsageSaveRequest(
   val architecture: String,
   val usage: Double,
 ) {
-  fun toLineProtocol() = CpuUsage(Instant.now())
+  fun toMeasurement() = CpuUsage(Instant.now())
     .setArchitecture(architecture)
     .setUsagePercent(usage)
-    .toLineProtocol()
 }
 
 data class CpuUsageQueryRequest(
