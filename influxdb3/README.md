@@ -71,6 +71,14 @@ services:
       - --plugin-dir=/var/lib/influxdb3/plugins
 ```
 
+### 4.2. [Create token](https://docs.influxdata.com/influxdb3/core/get-started/setup/#set-up-authorization)
+```shell
+$ influxdb3 create token --admin
+
+// docker
+$ docker exec -it [CONTAINER_NAME] influxdb3 create token --admin
+```
+
 ## 5. [Using libraries](https://docs.influxdata.com/influxdb3/core/write-data/client-libraries/)
 
 ### 5.1 [InfluxDB 3 Java Client](https://github.com/InfluxCommunity/influxdb3-java)
