@@ -13,7 +13,7 @@ import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration(proxyBeanMethods = false)
-class InfluxDb2TestContainerConfig {
+class InfluxDB2TestContainerConfig {
 
   companion object {
     private const val INFLUX_DB_2_PORT = 8086
@@ -54,6 +54,5 @@ class InfluxDb2TestContainerConfig {
     val url = "http://${influxDb2Container.host}:${influxDb2Container.firstMappedPort}"
     return InfluxDBClientReactiveFactory.create(url, TOKEN.toCharArray(), ORG, BUCKET)
   }
-
 
 }
