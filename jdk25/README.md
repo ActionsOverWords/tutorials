@@ -17,30 +17,30 @@
 
 ## 2. 주요 기능 및 개선 사항
 ### 2.1. 플랫폼 및 런타임 관련 변화
-#### JEP 503: Remove the 32-bit x86 Port
-#### JEP 519: Compact Object Headers
-#### JEP 521: Generational Shenandoah
+- JEP 503: Remove the 32-bit x86 Port
+- JEP 519: Compact Object Headers
+- JEP 521: Generational Shenandoah
 
 ### 2.2. 언어 및 개발 생산성 개선
-#### JEP 506: Scoped Values
-#### JEP 505: Structured Concurrency (Fifth Preview)
-#### JEP 507: Primitive Types in Patterns, instanceof, and switch (Third Preview)
-#### JEP 511: Module Import Declarations
-#### JEP 512: Compact Source Files and Instance Main Methods
-#### JEP 513: Flexible Constructor Bodies
+- JEP 506: Scoped Values
+- JEP 505: Structured Concurrency (Fifth Preview)
+- JEP 507: Primitive Types in Patterns, instanceof, and switch (Third Preview)
+- JEP 511: Module Import Declarations
+- JEP 512: Compact Source Files and Instance Main Methods
+- JEP 513: Flexible Constructor Bodies
 
 ### 2.3. 성능 및 보안 관련 기능
-#### JEP 508: Vector API (Tenth Incubator)
-#### JEP 509: JFR CPU-Time Profiling (Experimental)
-#### JEP 510: Key Derivation Function API
-#### JEP 514: Ahead-of-Time Command-Line Ergonomics
-#### JEP 515: Ahead-of-Time Method Profiling
-#### JEP 518: JFR Cooperative Sampling
-#### JEP 520: JFR Method Timing & Tracing
+- JEP 508: Vector API (Tenth Incubator)
+- JEP 509: JFR CPU-Time Profiling (Experimental)
+- JEP 510: Key Derivation Function API
+- JEP 514: Ahead-of-Time Command-Line Ergonomics
+- JEP 515: Ahead-of-Time Method Profiling
+- JEP 518: JFR Cooperative Sampling
+- JEP 520: JFR Method Timing & Tracing
 
 ### 2.4. 개발자 경험 강화 기능
-#### JEP 470: PEM Encodings of Cryptographic Objects (Preview)
-#### JEP 502: Stable Values
+- JEP 470: PEM Encodings of Cryptographic Objects (Preview)
+- JEP 502: Stable Values
 
 
 ## 참고
