@@ -197,7 +197,7 @@ EOF
 / # vault kv put kv/tutorials/local api-key=TUTORIAL-API-KEY
 ```
 
-### 5.7. Enabled Secrets Engines : DataBase
+### 5.7. Enabled Secrets Engines : [DataBase](https://developer.hashicorp.com/vault/docs/secrets/databases/mysql-maria)
 - Dynamic Secrets
 ```shell
 / # vault secrets enable database
@@ -226,12 +226,12 @@ EOF
 #### 5.7.3. 권한 추가
 ```shell
 / # echo 'path "database/creds/tutorials-db-role" { capabilities = ["read"] }' >> tutorials-policy.hcl
+
+/ # vault policy write tutorials-policy tutorials-policy.hcl
 ```
 
 #### 5.7.3. 권한 갱신
 ```shell
-/ # vault policy write tutorials-policy tutorials-policy.hcl
-
 / # vault write auth/approle/role/tutorials-role policies="tutorials-policy"
 ```
 
@@ -251,14 +251,20 @@ Unseal Key (will be hidden):
 #### 6.2.1. 권한 추가
 ```shell
 / # echo 'path "sys/leases/revoke" { capabilities = ["update"] }' >> tutorials-policy.hcl
+
+/ # vault policy write tutorials-policy tutorials-policy.hcl
 ```
 
-#### 6.2.2 권한 갱신
+#### 6.2.2. 권한 갱신
 ```shell
-/ # vault policy write tutorials-policy tutorials-policy.hcl
-
 / # vault write auth/approle/role/tutorials-role policies="tutorials-policy"
 ```
+
+#### 6.2.3. 접속한 DB 사용자 확인 시 `root`로 접속하는 경우
+- DB(MariaDB) 사용자는 추가 되었으나 DataSource는 root로 접속
+- Spring Bean 로딩/초기화 이슈로 Vault 연동이 Bean 생성 시점 이후에 됨
+- [DataSourceConfig](src/main/kotlin/tutorials/vault/config/DataSourceConfig.kt) 처럼 `@DependsOn("vaultTemplate")` 해줘야 함
+
 
 ## 7. Other Secrets Engines
 ### 7.1. [Transit](https://velog.io/@gweowe/Vault-transit%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-Data-%EC%95%94%ED%98%B8%ED%99%94-Ubuntu)
