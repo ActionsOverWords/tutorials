@@ -1,0 +1,25 @@
+services:
+  vault-oss:
+    container_name: vault
+    image: hashicorp/vault:1.20
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "listener": [{"tcp": { "address": "0.0.0.0:8200", "tls_disable": true}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
+    cap_add:
+      - IPC_LOCK
+    command: server
+
+  mariadb:
+    container_name: tutorials-mariadb
+    image: mariadb:10.11
+    environment:
+      - MYSQL_DATABASE=tutorials
+      - MYSQL_ROOT_PASSWORD=111111
+    ports:
+      - "3306:3306"
+    command:
+      - --character_set_server=utf8
+      - --collation-server=utf8_unicode_ci
+      - --lower_case_table_names=1
+      - --skip-ssl
