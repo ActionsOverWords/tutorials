@@ -2,10 +2,10 @@ package tutorials
 
 import org.springframework.boot.fromApplication
 import org.springframework.boot.with
-import tutorials.config.InfluxDb2TestContainerConfig
+import tutorials.config.InfluxDB2TestContainerConfig
 
 fun main(args: Array<String>) {
   fromApplication<InfluxdbApplication>()
-    .with(InfluxDb2TestContainerConfig::class)
+    .with(InfluxDB2TestContainerConfig::class)
     .run(*args)
 }

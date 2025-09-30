@@ -21,7 +21,7 @@ import reactor.test.StepVerifier
 import tutorials.base.consts.MeasurementConst.SIMPLE
 import tutorials.base.fixture.Fixtures
 import tutorials.config.AbstractContainerTest
-import tutorials.config.InfluxDb2TestContainerConfig.Companion.BUCKET
+import tutorials.config.InfluxDB2TestContainerConfig.Companion.BUCKET
 import tutorials.measurement.Sensor
 import java.time.Instant
 import java.time.temporal.ChronoUnit

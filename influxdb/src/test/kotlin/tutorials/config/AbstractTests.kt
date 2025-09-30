@@ -16,7 +16,7 @@ abstract class AbstractIntegrationTest {
 }
 
 @Testcontainers
-@Import(InfluxDb2TestContainerConfig::class)
+@Import(InfluxDB2TestContainerConfig::class)
 abstract class AbstractContainerTest : AbstractIntegrationTest() {
   @Autowired
   lateinit var influxDb2Client: InfluxDBClient

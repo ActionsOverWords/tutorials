@@ -8,10 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import tutorials.influxdb3.config.AbstractIntegrationTest
 import java.time.Instant
 
+/**
+ * 테스트 케이스 에러 발생 시
+ * <pre>com.influxdb.v3.client.InfluxDBApiException: java.net.ConnectException</pre>
+ * Docker Compose(influxdb3/compose.yml)로 InfluxDB3 실행 후 테스트 진행
+ * - InfluxDB3 TestContainer 실행 안되는 이슈 있음
+ */
 class SdkTest : AbstractIntegrationTest() {
 
   @Autowired
   lateinit var influxDBClient: InfluxDBClient
+
 
   @Nested
   @TestInstance(TestInstance.Lifecycle.PER_CLASS)
