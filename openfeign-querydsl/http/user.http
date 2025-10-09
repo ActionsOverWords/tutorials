@@ -1,0 +1,18 @@
+### register
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "tutorials",
+  "role": "USER"
+}
+
+> {%
+    client.global.set("userId", response.body.id);
+%}
+
+### find
+GET http://localhost:8080/users/{{userId}}
+Accept: application/json
+
+###
