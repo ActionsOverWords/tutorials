@@ -24,7 +24,7 @@ repositories {
   mavenCentral()
 }
 
-val querydslVersion = 6.11
+val querydslVersion = 7.0
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
