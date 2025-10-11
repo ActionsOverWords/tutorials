@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <springProperty name="name" source="spring.application.name"/>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <labels>
+            app = ${name}
+            host = ${HOSTNAME}
+        </labels>
+        <message>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </message>
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+            <requestTimeoutMs>5000</requestTimeoutMs>
+        </http>
+        <batch>
+            <maxItems>100</maxItems>
+            <timeoutMs>10000</timeoutMs>
+        </batch>
+        <verbose>true</verbose>
+    </appender>
+
+    <logger name="tutorials.grafanaloki" level="DEBUG"/>
+
+    <root level="INFO">
+        <appender-ref ref="LOKI"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

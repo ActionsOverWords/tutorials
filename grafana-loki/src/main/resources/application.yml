@@ -1,0 +1,7 @@
+spring:
+  application.name: grafana-loki
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
