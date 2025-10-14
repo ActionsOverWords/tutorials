@@ -1,0 +1,17 @@
+###
+GET localhost:8080/hello
+
+### io_task
+GET http://localhost:8080/io_task
+
+### cpu_task
+GET http://localhost:8080/cpu_task
+
+### random_sleep
+GET http://localhost:8080/random_sleep
+
+### random_status
+GET http://localhost:8080/random_status
+
+### error_test
+GET http://localhost:8080/error_test
