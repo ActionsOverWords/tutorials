@@ -67,8 +67,8 @@ prometheus.scrape "spring_boot" {
   scrape_interval = "30s"
   metrics_path = "/actuator/prometheus"
 
-  scrape_classic_histograms = true   # Histogram 수집
-  enable_protobuf_negotiation = true # OpenMetrics 협상
+  scrape_classic_histograms = true   // Histogram 수집
+  enable_protobuf_negotiation = true // OpenMetrics 협상
   honor_labels = true
 }
 
