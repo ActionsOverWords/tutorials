@@ -244,6 +244,144 @@ EOF
 / # vault write auth/approle/role/tutorials-role policies="tutorials-policy"
 ```
 
+### 5.8. Enabled Secrets Engines : [Transit](https://developer.hashicorp.com/vault/docs/secrets/transit)
+```shell
+/ # vault secrets enable transit
+
+// Allow encryption operations
+/ # echo 'path "transit/encrypt/tutorials-key" { capabilities = ["create", "update"] }' >> tutorials-policy.hcl
+
+// Allow decryption operations
+/ # echo 'path "transit/decrypt/tutorials-key" { capabilities = ["create", "update"] }' >> tutorials-policy.hcl
+
+// Allow rewrap operations
+/ # echo 'path "transit/rewrap/tutorials-key" { capabilities = ["create", "update"] }' >> tutorials-policy.hcl
+
+// Allow key rotation
+/ # echo 'path "transit/keys/tutorials-key/rotate" { capabilities = ["create", "update"] }' >> tutorials-policy.hcl
+
+/ # vault policy write tutorials-policy tutorials-policy.hcl
+
+/ # vault write auth/approle/role/tutorials-role policies="tutorials-policy"
+```
+
+#### 5.8.1. Create encryption key
+```shell
+/ # vault write -f transit/keys/tutorials-key
+<<<
+Key                       Value
+---                       -----
+allow_plaintext_backup    false
+auto_rotate_period        0s
+deletion_allowed          false
+derived                   false
+exportable                false
+imported_key              false
+keys                      map[1:1760579663]
+latest_version            1 # 현재 키 버전
+min_available_version     0
+min_decryption_version    1 # 복호화할 수 있는 최소 키 버전
+min_encryption_version    0
+name                      tutorials-key
+supports_decryption       true
+supports_derivation       true
+supports_encryption       true
+supports_signing          false
+type                      aes256-gcm96 # 키 타입
+
+/ # vault list transit/keys
+```
+
+#### 5.8.2. Usage
+- 암호화
+  ```shell
+    / # vault write transit/encrypt/tutorials-key plaintext=$(echo "my secret data" | base64)
+    <<<
+    Key            Value
+    ---            -----
+    ciphertext     vault:v1:PLPmZ63X0dBvf7E45OEQUFbCDowNYymtVOfG9nXdF0Qp20N9B/GHKF9rlA==
+    key_version    1
+    ```
+- 복호화
+    ```shell
+    / # vault write transit/decrypt/tutorials-key ciphertext=vault:v1:PLPmZ63X0dBvf7E45OEQUFbCDowNYymtVOfG9nXdF0Qp20N9B/GHKF9rlA==
+    <<<
+    Key          Value
+    ---          -----
+    plaintext    bXkgc2VjcmV0IGRhdGEK
+
+    / # echo bXkgc2VjcmV0IGRhdGEK | base64 -d
+    <<<
+    my secret data
+    ```
+  
+#### 5.8.3. Rotate
+```shell
+/ # vault write -f transit/keys/tutorials-key/rotate
+<<<
+Key                       Value
+---                       -----
+keys                      map[1:1760579663 2:1760580567]
+latest_version            2 # 현재 버전 증가
+min_available_version     0
+min_decryption_version    1
+min_encryption_version    0
+name                      tutorials-key
+type                      aes256-gcm9
+```
+- 다시 암/복호화 테스트
+    ```shell
+    / # vault write transit/encrypt/tutorials-key plaintext=$(echo "tutorials" | base64)
+    <<<
+    Key            Value
+    ---            -----
+    ciphertext     vault:v2:+DUvGfx6oeCsY2in2vDd8OBguEyc61bwcb4Hm7Xt5HDXxWM8LV8=
+    key_version    2
+
+    / # vault write transit/decrypt/tutorials-key ciphertext=vault:v2:+DUvGfx6oeCsY2in2vDd8OBguEyc61bwcb4Hm7Xt5HDXxWM8LV8=
+    <<<
+    Key          Value
+    ---          -----
+    plaintext    dHV0b3JpYWxzCg==
+
+    / # echo dHV0b3JpYWxzCg== | base64 -d
+    <<<
+    tutorials
+    ```
+
+#### 5.8.4. Manage Key version
+```shell
+/ # vault write transit/keys/tutorials-key/config min_decryption_version=2
+<<<
+latest_version            2
+min_available_version     0
+min_decryption_version    2
+min_encryption_version    0
+name                      tutorials-key
+```
+
+- `v1`으로 복호화 시도 시 에러
+```shell
+/ # vault write transit/decrypt/tutorials-key ciphertext=vault:v1:PLPmZ63X0dBvf7E45OEQUFbCDowNYymtVOfG9nXdF0Qp20N9B/GHKF9rlA==
+<<<
+Error writing data to transit/decrypt/tutorials-key: Error making API request.
+                                                                                                                                                                                                                                                                                                                        
+URL: PUT http://127.0.0.1:8200/v1/transit/decrypt/tutorials-key                                                                                                                                                                                                                                                         
+Code: 400. Errors:                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                                        
+* ciphertext or signature version is disallowed by policy (too old)
+```
+
+#### 5.8.5. Rewrap
+- 이전 버의 데이터를 새로운 키로 재 암호화
+```shell
+/ # vault write transit/rewrap/tutorials-key ciphertext=vault:v1:PLPmZ63X0dBvf7E45OEQUFbCDowNYymtVOfG9nXdF0Qp20N9B/GHKF9rlA==
+<<<
+Key            Value
+---            -----
+ciphertext     vault:v2:sHZj3NM4Okt8Uj0WZCXwgr+Po6eTxjr+cpi59qoMnbIEEsKV1DsghZ9Qxg==
+key_version    2
+```
 
 ## 6. Error
 ### 6.1. `Code: 503. Errors: * Vault is sealed` 발생 시

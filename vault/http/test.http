@@ -1,0 +1,26 @@
+### encrypt
+GET http://localhost:8080/encrypt?text=tutorials
+
+> {%
+    client.global.set("ciphertext", response.body);
+%}
+
+### decrypt
+GET http://localhost:8080/decrypt?ciphertext={{ciphertext}}
+
+
+
+### rewrap
+GET http://localhost:8080/rewrap?ciphertext={{ciphertext}}
+
+> {%
+    client.global.set("ciphertext2", response.body);
+%}
+
+### decrypt
+GET http://localhost:8080/decrypt?ciphertext={{ciphertext2}}
+
+
+
+### rotate
+GET http://localhost:8080/rotate

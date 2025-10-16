@@ -20,8 +20,8 @@ spring:
 
     authentication: APPROLE
     app-role:
-      role-id: ba04f13f-4d00-7880-8a84-5619ea862b66
-      secret-id: 4fb3491b-09b8-909a-b1d5-fe143dd71d55
+      role-id: ffeaeaa8-acdb-9bd0-2b39-5ebb66e1d6a0
+      secret-id: 3b4496cc-1874-8882-5dfb-e57ad506b3e9
       role: tutorials-role
 
     kv:
@@ -37,6 +37,10 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/tutorials
     driver-class-name: org.mariadb.jdbc.Driver
+
+vault:
+  transit:
+    keyName: tutorials-key
 
 logging:
   level:
