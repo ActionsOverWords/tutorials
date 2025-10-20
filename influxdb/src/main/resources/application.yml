@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  application.name: influxdb
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+influxdb2:
+  url: http://localhost:8086
+  token: actionsoverwords
+  org: ActionsOverWords
+  bucket: tutorials
+
+logging:
+  level:
+    org.testcontainers: trace
+    tutorials: debug

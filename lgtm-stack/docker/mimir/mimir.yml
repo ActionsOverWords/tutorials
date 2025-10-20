@@ -1,0 +1,31 @@
+# Mimir configuration for single-instance mode
+target: all,alertmanager
+
+multitenancy_enabled: false
+
+server:
+  http_listen_port: 9009
+  log_level: info
+
+blocks_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/mimir/blocks
+  tsdb:
+    retention_period: 24h
+
+compactor:
+  data_dir: /data/mimir/compactor
+
+ingester:
+  ring:
+    replication_factor: 1
+
+ruler_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/mimir/ruler
+
+limits:
+  max_query_lookback: 0
+  max_global_exemplars_per_user: 100000

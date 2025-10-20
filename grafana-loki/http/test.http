@@ -1,0 +1,8 @@
+### logging
+GET http://localhost:8080/log?message=1234567890&level=ERROR
+
+### loggin
+GET http://localhost:8080/log?message=경고&level=WARN
+
+### exception
+GET http://localhost:8080/exception

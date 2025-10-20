@@ -1,0 +1,21 @@
+### register
+POST http://localhost:8080/users
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+username = tutorials &
+role = admin
+
+> {%
+    client.global.set("userId", response.body.id);
+%}
+
+### list
+GET http://localhost:8080/users
+Accept: application/json
+
+### get
+GET http://localhost:8080/users/{{userId}}
+Accept: application/json
+
+###

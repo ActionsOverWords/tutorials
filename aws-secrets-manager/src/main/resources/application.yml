@@ -1,0 +1,24 @@
+spring:
+  application.name: aws-secrets-manager
+
+  cloud:
+    aws:
+      credentials:
+        access-key: test
+        secret-key: test
+      region:
+        static: ap-northeast-2
+      secretsmanager:
+        enabled: true
+        endpoint: http://0.0.0.0:4566
+
+  config.import:
+    - "optional:aws-secretsmanager:tutorial-key"
+
+kms: "\${tutorial-key:application-none}"
+
+logging:
+  level:
+    io.awspring.cloud: DEBUG
+    com.amazonaws: DEBUG
+    tutorials: DEBUG

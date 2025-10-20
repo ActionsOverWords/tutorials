@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  application.name: tutorials
+  profiles.active: local
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+  config.import: "vault://"
+  cloud.vault:
+    enabled: true
+    scheme: http
+    host: localhost
+    port: 8200
+    fail-fast: true
+
+    authentication: APPROLE
+    app-role:
+      role-id: ffeaeaa8-acdb-9bd0-2b39-5ebb66e1d6a0
+      secret-id: 3b4496cc-1874-8882-5dfb-e57ad506b3e9
+      role: tutorials-role
+
+    kv:
+      enabled: true
+      backend: kv/tutorials
+      default-context: "\${spring.profiles.active}"
+
+    database:
+      enabled: true
+      role: tutorials-db-role
+      backend: database
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/tutorials
+    driver-class-name: org.mariadb.jdbc.Driver
+
+vault:
+  transit:
+    keyName: tutorials-key
+
+logging:
+  level:
+    tutorials: debug

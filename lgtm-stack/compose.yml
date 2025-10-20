@@ -1,0 +1,77 @@
+services:
+  mimir:
+    image: grafana/mimir:2.17.1
+    container_name: mimir
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command: ["-target=all,alertmanager", "-config.file=/etc/mimir.yml"]
+    volumes:
+      - ./docker/mimir/mimir.yml:/etc/mimir.yml
+    ports:
+      - "9009:9009"
+
+  loki:
+    image: grafana/loki:3.4.1
+    container_name: loki
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+
+  tempo:
+    image: grafana/tempo:2.8.2
+    container_name: tempo
+    user: "0"  # Run as root to avoid permission issues with volumes
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command: ['-config.file=/etc/tempo.yml']
+    volumes:
+      - tempo:/tmp/tempo
+      - ./docker/tempo/tempo.yml:/etc/tempo.yml:ro
+    ports:
+      - "3200:3200"   # Tempo UI
+      - "4317:4317"   # OTLP gRPC for Alloy
+
+  alloy:
+    image: grafana/alloy:v1.11.0
+    container_name: alloy
+    extra_hosts: ['host.docker.internal:host-gateway']
+    volumes:
+      - ./docker/alloy/alloy.river:/etc/alloy/config.river
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - "run"
+      - "--server.http.listen-addr=0.0.0.0:12345"
+      - "/etc/alloy/config.river"
+    ports:
+      - "12345:12345" # Alloy UI
+      - "4318:4318"   # OTLP HTTP for Spring Boot App
+    depends_on:
+      - mimir
+      - loki
+      - tempo
+
+  grafana:
+    image: grafana/grafana:11.5.3
+    container_name: grafana
+    extra_hosts: ['host.docker.internal:host-gateway']
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./docker/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+
+  mariadb:
+    image: 'mariadb:latest'
+    container_name: mariadb
+    environment:
+      - 'MARIADB_DATABASE=tutorials'
+      - 'MARIADB_PASSWORD=secret'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=myuser'
+    ports:
+      - '3306'
+
+volumes:
+  tempo:

@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: lgtm-stack
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+# Observability Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+  # Tracing: OpenTelemetry (exported to Tempo via Alloy)
+  otlp:
+    tracing:
+      endpoint: http://localhost:4318/v1/traces # Alloy OTLP HTTP
+  tracing:
+    sampling:
+      probability: 1.0
+
+  # Metrics: Prometheus format (exported to Mimir via Alloy)
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+  # Metrics Distribution: Histogram & Exemplar 활성화
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+    tags:
+      application: "\${spring.application.name}"

@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application.name: influxdb3
+
+  datasource:
+    url: jdbc:arrow-flight-sql://localhost:8181?useEncryption=false&database=tutorials
+    driver-class-name: org.apache.arrow.driver.jdbc.ArrowFlightJdbcDriver
+    username: ignored
+    password: "\${INFLUXDB3_AUTH_TOKEN:apiv3_ZNhtFhwCZdKy0c91YHAA1fUDabKc7ZN1Cvl6KBs4o88GQz55MbSBWygchUPSChkScbLvnCBEBBXCTwc4OVW6Pg}"
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+influxdb3:
+  host: localhost
+  port: 8181
+  use-tls: false
+  token: "\${INFLUXDB3_AUTH_TOKEN:apiv3_ZNhtFhwCZdKy0c91YHAA1fUDabKc7ZN1Cvl6KBs4o88GQz55MbSBWygchUPSChkScbLvnCBEBBXCTwc4OVW6Pg}"
+  database: tutorials
+
+logging:
+  level:
+    org.testcontainers: error
+    tutorials: debug

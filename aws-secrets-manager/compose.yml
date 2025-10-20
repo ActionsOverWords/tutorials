@@ -1,0 +1,16 @@
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:4.9.2
+    ports:
+      - "4566:4566"
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - SERVICES=secretsmanager
+      - DEBUG=${DEBUG:-0}
+      - AWS_ACCESS_KEY_ID=test            # 내부에서 aws 커맨드 사용을 위해 지정 awslocal 을 사용하면 필요없음
+      - AWS_SECRET_ACCESS_KEY=test        # 위와 동일
+      - AWS_DEFAULT_REGION=ap-northeast-2 # 위와 동일
+    volumes:
+      - ./docker/localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock:ro

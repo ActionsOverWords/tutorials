@@ -1,0 +1,80 @@
+// 1. OTLP Receiver: Traces 수신 (Spring Boot -> Alloy)
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+
+  output {
+    traces = [otelcol.exporter.otlp.tempo.input]
+  }
+}
+
+// 2. OTLP Exporter: Traces 전송 (Alloy -> Tempo)
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+    tls {
+      insecure = true
+    }
+  }
+}
+
+// 3. Loki: Docker 로그 수집
+discovery.docker "docker_containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+loki.source.docker "docker_logs" {
+  host = "unix:///var/run/docker.sock"
+  targets = discovery.docker.docker_containers.targets
+  forward_to = [loki.relabel.docker_logs.receiver]
+  relabel_rules = loki.relabel.docker_logs.rules
+}
+
+// Docker 로그에 service_name 레이블 추가
+loki.relabel "docker_logs" {
+  forward_to = [loki.write.default.receiver]
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex = "/(.*)"
+    target_label = "service_name"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    target_label = "container"
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+// 4. Prometheus: Metrics 수집 (Spring Boot Actuator)
+prometheus.scrape "spring_boot" {
+  targets = [{
+    "__address__" = "10.2.114.21:8080",
+    "job" = "lgtm-stack-app",
+    "instance" = "spring-boot-app",
+  }]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "30s"
+  metrics_path = "/actuator/prometheus"
+
+  scrape_classic_histograms = true   // Histogram 수집
+  enable_protobuf_negotiation = true // OpenMetrics 협상
+  honor_labels = true
+}
+
+prometheus.remote_write "mimir" {
+  endpoint {
+    url = "http://mimir:9009/api/v1/push"
+    send_exemplars = true
+  }
+}

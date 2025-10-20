@@ -1,0 +1,55 @@
+# config file version
+apiVersion: 1
+
+datasources:
+  - uid: mimir
+    name: Mimir
+    type: prometheus
+    access: proxy
+    url: http://mimir:9009/prometheus
+    isDefault: true
+    jsonData:
+      # Exemplar를 통해 Tempo로 연동
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: tempo
+    editable: true
+
+  - uid: loki
+    name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      maxLines: 1000
+      # 로그에서 traceId를 추출하여 Tempo로 연동
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: '\[([0-9a-f]{32}),([0-9a-f]{16})\]'
+          name: traceId
+          url: '$${__value.raw}'
+    editable: true
+
+  - uid: tempo
+    name: Tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    jsonData:
+      httpMethod: GET
+      tracesToLogsV2:
+        datasourceUid: 'loki'
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
+        filterByTraceID: true
+        filterBySpanID: false
+        tags:
+          - key: 'service.name'
+            value: 'service'
+      tracesToMetrics:
+        datasourceUid: 'mimir'
+      serviceMap:
+        datasourceUid: 'mimir'
+      nodeGraph:
+        enabled: true
+    editable: true
