@@ -48,8 +48,26 @@ datasources:
             value: 'service'
       tracesToMetrics:
         datasourceUid: 'mimir'
+      tracesToProfiles:
+        datasourceUid: 'pyroscope'
+        tags:
+          - service.name
+          - service.namespace
+        profileTypeId: 'process_cpu:cpu:nanoseconds:cpu:nanoseconds'
+        customQuery: true
+        query: 'process_cpu:cpu:nanoseconds:cpu:nanoseconds{service_name="$${__tags.service.name}"}'
       serviceMap:
         datasourceUid: 'mimir'
       nodeGraph:
         enabled: true
+    editable: true
+
+  - uid: pyroscope
+    name: Pyroscope
+    type: grafana-pyroscope-datasource
+    access: proxy
+    url: http://pyroscope:4040
+    jsonData:
+      keepCookies: []
+      minStep: '15s'
     editable: true

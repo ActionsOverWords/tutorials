@@ -1,9 +1,9 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 
 plugins {
-  kotlin("jvm") version "1.9.25"
-  kotlin("plugin.spring") version "1.9.25"
-  kotlin("plugin.jpa") version "1.9.25"
+  kotlin("jvm") version "2.1.0"
+  kotlin("plugin.spring") version "2.1.0"
+  kotlin("plugin.jpa") version "2.1.0"
 
   id("org.springframework.boot") version "3.5.6"
   id("io.spring.dependency-management") version "1.1.7"
@@ -41,6 +41,9 @@ dependencies {
 
   // Logs: Send logs to Loki directly
   implementation("com.github.loki4j:loki-logback-appender:2.0.0")
+
+  // Profiling: Pyroscope Java Client
+  implementation("io.pyroscope:agent:2.1.2")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   developmentOnly("org.springframework.boot:spring-boot-docker-compose")

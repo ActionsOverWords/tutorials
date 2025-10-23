@@ -1,5 +1,5 @@
-###
-GET localhost:8080/hello
+### counter
+GET localhost:8080/counter
 
 ### io_task
 GET http://localhost:8080/io_task
@@ -15,3 +15,6 @@ GET http://localhost:8080/random_status
 
 ### error_test
 GET http://localhost:8080/error_test
+
+### chain
+GET http://localhost:8080/chain

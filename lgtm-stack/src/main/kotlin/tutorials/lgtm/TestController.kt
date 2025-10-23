@@ -6,10 +6,16 @@ import jakarta.servlet.http.HttpServletResponse
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.RestTemplate
+import java.time.LocalDateTime
 import java.util.Random
+import kotlin.math.sqrt
 
 @RestController
-class TestController(meterRegistry: MeterRegistry) {
+class TestController(
+  meterRegistry: MeterRegistry,
+  private val restTemplate: RestTemplate
+) {
 
   private val log = LogFactory.getLog(javaClass)
 
@@ -17,8 +23,8 @@ class TestController(meterRegistry: MeterRegistry) {
     .description("Counts total calls to /hello endpoint")
     .register(meterRegistry)
 
-  @GetMapping("/hello")
-  fun hello(): String {
+  @GetMapping("/counter")
+  fun counter(): String {
     // 1. Log 생성 (traceId, spanId가 자동으로 포함됨)
     log.info("Hello endpoint was invoked!")
 
@@ -45,17 +51,32 @@ class TestController(meterRegistry: MeterRegistry) {
   }
 
   @GetMapping("/cpu_task")
-  fun cpu_task(): String {
-    for (i in 0..999) {
-      val tmp = i * i * i
+  fun cpuTask(): String {
+    val operations = 1000000000L
+    var result = 0.0
+    val startTime = System.nanoTime()
+
+    for (i in 0..<operations) {
+      result += sqrt(i.toDouble())
     }
-    log.info("cpu_task")
-    return "cpu_task"
+
+    val endTime = System.nanoTime()
+
+    val durationNano = endTime - startTime
+    val durationMillis = durationNano / 1000000.0 // 밀리초(ms)
+    val durationSeconds = durationNano / 1000000000.0 // 초(s)
+
+    log.debug("테스트 완료.")
+    log.debug("----------------------------------------")
+    log.debug("총 걸린 시간: $durationMillis ms")
+    log.debug("총 걸린 시간: $durationSeconds s")
+
+    return "cpu_task: $result : [${LocalDateTime.now()}]"
   }
 
   @GetMapping("/random_sleep")
   @Throws(InterruptedException::class)
-  fun random_sleep(): String {
+  fun randomSSSSSleep(): String {
     Thread.sleep((Math.random() / 5 * 10000).toInt().toLong())
     log.info("random_sleep")
     return "random_sleep"
@@ -63,7 +84,7 @@ class TestController(meterRegistry: MeterRegistry) {
 
   @GetMapping("/random_status")
   @Throws(InterruptedException::class)
-  fun random_status(response: HttpServletResponse): String {
+  fun randomStatus(response: HttpServletResponse): String {
     val givenList = mutableListOf<Int?>(200, 200, 300, 400, 500)
     val rand = Random()
     val randomElement: Int = givenList.get(rand.nextInt(givenList.size))!!
@@ -72,28 +93,20 @@ class TestController(meterRegistry: MeterRegistry) {
     return "random_status"
   }
 
-/*
-  @GetMapping("/chain")
-  @Throws(InterruptedException::class, IOException::class)
-  fun chain(): String {
-    val TARGET_ONE_HOST = System.getenv().getOrDefault("TARGET_ONE_HOST", "localhost")
-    val TARGET_TWO_HOST = System.getenv().getOrDefault("TARGET_TWO_HOST", "localhost")
-    log.debug("chain is starting")
-    Request.Get("http://localhost:8080/")
-      .execute().returnContent()
-    Request.Get(String.format("http://%s:8080/io_task", TARGET_ONE_HOST))
-      .execute().returnContent()
-    Request.Get(String.format("http://%s:8080/cpu_task", TARGET_TWO_HOST))
-      .execute().returnContent()
-    log.debug("chain is finished")
-    return "chain"
-  }
-*/
-
   @GetMapping("/error_test")
   @Throws(Exception::class)
-  fun error_test(): String? {
+  fun errorTest(): String? {
     throw Exception("Error test")
+  }
+
+  @GetMapping("/chain")
+  fun chain(): String {
+    log.debug("chain is starting")
+    restTemplate.getForObject("http://localhost:8080/random_sleep", String::class.java)
+    restTemplate.getForObject("http://10.2.114.21:8080/io_task", String::class.java)
+    restTemplate.getForObject("http://10.2.114.21:8080/cpu_task", String::class.java)
+    log.debug("chain is finished")
+    return "chain"
   }
 
 }

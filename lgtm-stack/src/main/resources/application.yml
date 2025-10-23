@@ -39,3 +39,11 @@ management:
         http.server.requests: true
     tags:
       application: "\${spring.application.name}"
+
+# Pyroscope Configuration
+pyroscope:
+  server-address: http://localhost:4040
+  application-name: "\${spring.application.name}"
+  format: JFR
+  profiling-alloc: "512k"  # Sample every 512KB allocated
+  profiling-lock: "10ms"   # Sample locks held for 10ms or longer
