@@ -70,7 +70,6 @@ services:
       - "3000:3000"
     volumes:
       - ./docker/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasources.yml
-
     environment:
       - GF_INSTALL_PLUGINS=grafana-pyroscope-app
       - GF_AUTH_ANONYMOUS_ENABLED=true
