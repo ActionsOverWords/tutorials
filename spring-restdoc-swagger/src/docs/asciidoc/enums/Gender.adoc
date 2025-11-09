@@ -1,0 +1,7 @@
+ifndef::snippets[]
+:snippets: build/generated-snippets
+endif::[]
+= Gender
+:doctype: book
+
+include::{snippets}/enums/enum-response-fields-Gender.adoc[]
