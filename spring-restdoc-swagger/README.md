@@ -139,6 +139,14 @@ mockMvc.perform(
 )
 ```
 
+# Custom
+## REST Docs에 DTO Bean Validation 담기
+- https://0soo.tistory.com/203
+## RestDocs Custom - 문서 커스텀
+- https://0soo.tistory.com/201
+## Custom Error Code Enum 문서화
+- https://0soo.tistory.com/210
+
 ## 참고
 - [Spring REST Docs](https://docs.spring.io/spring-restdocs/docs/current/reference/htmlsingle/#documenting-your-api)
 - 우아한 형제들
