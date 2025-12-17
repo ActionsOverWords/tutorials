@@ -9,18 +9,14 @@ import tutorials.javers.config.AbstractTests.AbstractIntegrationTest
 import tutorials.javers.repository.CompanyRepository
 import tutorials.javers.repository.UserRepository
 import tutorials.javers.service.CompanyService
-import tutorials.javers.service.JaVersService
-import tutorials.javers.service.UserService
 
 class JaversInterceptorTest(
   val javers: Javers,
-  val jaVersService: JaVersService,
 
   val companyRepository: CompanyRepository,
   val userRepository: UserRepository,
 
   val companyService: CompanyService,
-  val userService: UserService,
 ) : AbstractIntegrationTest() {
 
   @BeforeEach
