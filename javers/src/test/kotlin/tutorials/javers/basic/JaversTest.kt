@@ -7,7 +7,6 @@ import org.javers.core.diff.changetype.ValueChange
 import org.javers.core.metamodel.annotation.DiffIgnore
 import org.javers.core.metamodel.`object`.CdoSnapshot
 import org.javers.repository.jql.QueryBuilder
-import org.javers.spring.auditable.SpringSecurityAuthorProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
@@ -137,7 +136,6 @@ class JaversTest {
       QueryBuilder.byInstance(team).build()
     )
     logs(snapshots)
-    SpringSecurityAuthorProvider
 
     assertEquals(2, snapshots.size)
   }
