@@ -1,7 +1,6 @@
 package tutorials.javers.domain.javers.interceptor
 
 import org.hibernate.CallbackException
-import org.hibernate.Interceptor
 import org.hibernate.type.Type
 import org.javers.core.Javers
 import org.springframework.context.annotation.Fallback
@@ -15,7 +14,7 @@ import tutorials.javers.config.JaversInterceptor
 @Fallback
 class JaversInterceptorImpl(
   @param:Lazy val javers: Javers,
-) : JaversInterceptor, Interceptor {
+) : JaversInterceptor {
 
   private val log by logger()
 
