@@ -1,0 +1,21 @@
+spring:
+  application.name: javers
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+javers:
+  sql-schema-management-enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.javers: debug
+    tutorials.javers: debug

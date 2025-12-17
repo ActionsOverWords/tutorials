@@ -1,0 +1,11 @@
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    container_name: mariadb
+    environment:
+      - 'MARIADB_DATABASE=tutorials'
+      - 'MARIADB_PASSWORD=secret'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=myuser'
+    ports:
+      - '3306:3306'
