@@ -1,0 +1,18 @@
+services:
+  quickchart:
+    image: ianw/quickchart:latest
+    platform: linux/amd64
+    container_name: quickchart
+    ports:
+      - "3400:3400"
+    environment:
+      NODE_ENV: production
+      QUICKCHART_HOST_WHITELIST: "*"
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: gotenberg
+    ports:
+      - "3000:3000"
+    environment:
+      - GOTENBERG_LOG_LEVEL=info

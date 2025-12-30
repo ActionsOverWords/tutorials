@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${report.title}">Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 25mm 15mm;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'NanumGothic', sans-serif;
+                font-size: 10pt;
+                color: #666;
+            }
+            @bottom-right {
+                content: 'tutorials';
+                font-family: 'NanumGothic', sans-serif;
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+
+        @page:first {
+            @bottom-center {
+                content: none;
+            }
+            @bottom-right {
+                content: none;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'NanumGothic', sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .cover-page {
+            page-break-after: always;
+            width: 100%;
+            height: 250mm;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            padding: 100mm 40px;
+            position: relative;
+        }
+
+        .cover-content {
+            text-align: center;
+        }
+
+        .cover-title {
+            font-size: 36pt;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .cover-date {
+            font-size: 14pt;
+            opacity: 0.9;
+        }
+
+        .content-wrapper {
+            page-break-after: always;
+        }
+
+        .content-section {
+            padding: 20px 0;
+            page-break-inside: auto;
+        }
+
+        .section-title {
+            font-size: 20pt;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #667eea;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .section-content {
+            font-size: 11pt;
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 30px;
+            white-space: pre-wrap;
+        }
+
+        .charts-section {
+            page-break-before: always;
+        }
+
+        .chart-container {
+            margin: 30px auto;
+            padding: 20px;
+            max-width: 800px;
+            page-break-before: always;
+            page-break-after: always;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .chart-container:first-child {
+            page-break-before: avoid;
+        }
+
+        .chart-wrapper {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            page-break-inside: avoid;
+            break-inside: avoid;
+            text-align: center;
+        }
+
+        .chart-title {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .chart-image {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover-page">
+        <div class="cover-content">
+            <div class="cover-title" th:text="${report.title}">Report Title</div>
+            <div class="cover-date" th:text="${#temporals.format(report.createdAt, 'yyyy년 MM월 dd일')}">2024년 01월 01일</div>
+        </div>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="content-wrapper">
+        <div th:each="section, iterStat : ${report.sections}" class="content-section">
+            <div class="section-title" th:text="${section.title}">Section Title</div>
+            <div class="section-content" th:text="${section.content}">Section Content</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div th:if="${chartImages != null}" class="charts-section">
+        <div th:each="chart : ${chartImages}" class="chart-container">
+            <div class="chart-wrapper">
+                <div class="chart-title" th:text="${chart.key}">Chart Title</div>
+                <img th:src="'data:image/png;base64,' + ${chart.value}"
+                     class="chart-image"
+                     th:alt="${chart.key}"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

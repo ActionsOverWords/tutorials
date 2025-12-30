@@ -1,0 +1,21 @@
+spring:
+  application.name: pdf
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+      file: ${projectRootDir}/compose.yml
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+
+# External Service URLs
+external:
+  quickchart-url: "http://localhost:3400"
+  gotenberg-url: "http://localhost:3000"
+
+logging:
+  level:
+    tutorials.pdf: debug
