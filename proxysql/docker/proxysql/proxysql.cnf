@@ -1,0 +1,94 @@
+# ProxySQL 설정 파일
+# read/write 분기를 위한 설정
+
+datadir="/var/lib/proxysql"
+
+admin_variables=
+{
+    admin_credentials="admin:admin"
+    mysql_ifaces="0.0.0.0:6032"
+}
+
+mysql_variables=
+{
+    threads=4
+    max_connections=2048
+    default_query_delay=0
+    default_query_timeout=36000000
+    have_compress=true
+    poll_timeout=2000
+    interfaces="0.0.0.0:6033"
+    default_schema="information_schema"
+    stacksize=1048576
+    server_version="8.0.0"
+    connect_timeout_server=3000
+    monitor_username="monitor"
+    monitor_password="monitor"
+    monitor_history=600000
+    monitor_connect_interval=60000
+    monitor_ping_interval=10000
+    monitor_read_only_interval=1500
+    monitor_read_only_timeout=500
+    ping_interval_server_msec=120000
+    ping_timeout_server=500
+    commands_stats=true
+    sessions_sort=true
+    connect_retries_on_failure=10
+}
+
+# MySQL 서버 정의
+# hostgroup 0: write (master)
+# hostgroup 1: read (slave)
+mysql_servers =
+(
+    {
+        address="mariadb-master"
+        port=3306
+        hostgroup=0
+        max_connections=100
+        comment="Master Server"
+    },
+    {
+        address="mariadb-slave"
+        port=3306
+        hostgroup=1
+        max_connections=100
+        comment="Slave Server"
+    }
+)
+
+# MySQL 사용자 정의
+mysql_users:
+(
+    {
+        username = "myuser"
+        password = "secret"
+        default_hostgroup = 0
+        max_connections=1000
+        default_schema="mydatabase"
+        active = 1
+    }
+)
+
+# Query 라우팅 규칙
+# SELECT는 hostgroup 1 (read/slave)로 라우팅
+# 나머지 쿼리는 hostgroup 0 (write/master)로 라우팅
+mysql_query_rules:
+(
+    {
+        rule_id=1
+        active=1
+        match_digest="^SELECT.*FOR UPDATE$"
+        destination_hostgroup=0
+        apply=1
+        comment="SELECT FOR UPDATE는 master로"
+    },
+    {
+        rule_id=2
+        active=1
+        match_digest="^SELECT"
+        destination_hostgroup=1
+        apply=1
+        comment="일반 SELECT는 slave로"
+    }
+)

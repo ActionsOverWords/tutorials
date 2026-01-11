@@ -1,0 +1,131 @@
+# ProxySQL + MariaDB Master/Slave Replication 구성
+# - mariadb-master: Write 전용 서버
+# - mariadb-slave: Read 전용 서버 (master로부터 replication)
+# - proxysql: Read/Write 쿼리 분기 프록시
+
+services:
+  # ========================================
+  # MariaDB Master (Write 전용)
+  # ========================================
+  mariadb-master:
+    image: 'mariadb:11.7'
+    container_name: mariadb-master
+
+    # 환경 변수 설정
+    environment:
+      MARIADB_ROOT_PASSWORD: 'verysecret'
+      MARIADB_DATABASE: 'mydatabase'
+      MARIADB_USER: 'myuser'
+      MARIADB_PASSWORD: 'secret'
+
+    # MariaDB 서버 옵션
+    # - server-id: Replication을 위한 고유 서버 ID
+    # - log-bin: Binary log 활성화 (replication 필수)
+    # - binlog-format: ROW 기반 replication (데이터 안정성 높음)
+    # - sync-binlog: 트랜잭션마다 binlog를 디스크에 동기화
+    # - innodb-flush-log-at-trx-commit: 트랜잭션 커밋 시 로그 플러시 (ACID 보장)
+    command: >
+      --server-id=1
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --sync-binlog=1
+      --innodb-flush-log-at-trx-commit=1
+
+    # 볼륨 마운트
+    volumes:
+      - mariadb-master-data:/var/lib/mysql
+      - ./docker/mariadb/master/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    # 포트 매핑 (호스트:컨테이너)
+    # 직접 접근용 포트 (일반적으로 애플리케이션은 ProxySQL 6033 사용)
+    ports:
+      - '3307:3306'
+
+    # 헬스체크 (다른 서비스의 depends_on 조건으로 사용)
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ========================================
+  # MariaDB Slave (Read 전용)
+  # ========================================
+  mariadb-slave:
+    image: 'mariadb:11.7'
+    container_name: mariadb-slave
+
+    environment:
+      MARIADB_ROOT_PASSWORD: 'verysecret'
+      MARIADB_DATABASE: 'mydatabase'
+      MARIADB_USER: 'myuser'
+      MARIADB_PASSWORD: 'secret'
+
+    # MariaDB 서버 옵션
+    # - server-id: master와 다른 고유 서버 ID
+    # - log-bin: Slave도 binlog 활성화 (Slave to Slave 가능)
+    # - binlog-format: ROW 기반 replication
+    # - read-only: 읽기 전용 모드 (실수로 write 방지)
+    # - relay-log: Master로부터 받은 binlog를 relay log에 기록
+    command: >
+      --server-id=2
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --read-only=1
+      --relay-log=relay-log
+
+    volumes:
+      - mariadb-slave-data:/var/lib/mysql
+      - ./docker/mariadb/slave/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    ports:
+      - '3308:3306'
+
+    # master가 healthy 상태가 된 후 시작
+    depends_on:
+      mariadb-master:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ========================================
+  # ProxySQL (Read/Write 쿼리 분기)
+  # ========================================
+  proxysql:
+    image: 'proxysql/proxysql:latest'
+    # M1 Mac (ARM64)에서 Rosetta 2를 통한 x86_64 에뮬레이션
+    platform: linux/amd64
+    container_name: proxysql
+
+    volumes:
+      - ./docker/proxysql/proxysql.cnf:/etc/proxysql.cnf
+      - proxysql-data:/var/lib/proxysql
+
+    # 포트 매핑
+    # - 6033: MySQL 프로토콜 포트 (애플리케이션에서 이 포트로 접속)
+    # - 6032: Admin 포트 (ProxySQL 관리용, mysql -h127.0.0.1 -P6032 -uadmin -padmin)
+    ports:
+      - '6033:6033'
+      - '6032:6032'
+
+    # master와 slave가 모두 healthy 상태가 된 후 시작
+    depends_on:
+      mariadb-master:
+        condition: service_healthy
+      mariadb-slave:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "6033"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  mariadb-master-data:
+  mariadb-slave-data:
+  proxysql-data:

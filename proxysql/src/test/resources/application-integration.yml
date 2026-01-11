@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:6033/mydatabase
+    username: myuser
+    password: secret
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
