@@ -1,0 +1,30 @@
+services:
+  mariadb-tenant-a:
+    image: 'mariadb:latest'
+    container_name: mariadb-tenant-a
+    environment:
+      - 'MARIADB_DATABASE=tenantdb'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=tenant_a_user'
+      - 'MARIADB_PASSWORD=tenant_a_pass'
+    ports:
+      - '3316:3306'
+    volumes:
+      - mariadb-tenant-a-data:/var/lib/mysql
+
+  mariadb-tenant-b:
+    image: 'mariadb:latest'
+    container_name: mariadb-tenant-b
+    environment:
+      - 'MARIADB_DATABASE=tenantdb'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=tenant_b_user'
+      - 'MARIADB_PASSWORD=tenant_b_pass'
+    ports:
+      - '3317:3306'
+    volumes:
+      - mariadb-tenant-b-data:/var/lib/mysql
+
+volumes:
+  mariadb-tenant-a-data:
+  mariadb-tenant-b-data:

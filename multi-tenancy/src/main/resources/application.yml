@@ -1,0 +1,43 @@
+spring:
+  application.name: multi-tenancy
+
+  docker:
+    compose:
+      enabled: false
+      file: ${projectRootDir}/compose.yml
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+datasource:
+  tenants:
+    tenant-a:
+      url: jdbc:mariadb://localhost:3316/tenantdb
+      username: tenant_a_user
+      password: tenant_a_pass
+      driver-class-name: org.mariadb.jdbc.Driver
+    tenant-b:
+      url: jdbc:mariadb://localhost:3317/tenantdb
+      username: tenant_b_user
+      password: tenant_b_pass
+      driver-class-name: org.mariadb.jdbc.Driver
+
+jwt:
+  secret: "\${JWT_SECRET:your-256-bit-secret-key-for-development-only-please-change-in-production}"
+  expiration-ms: 3600000  # 1 hour
+
+logging:
+  level:
+    tutorials: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
