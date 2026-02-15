@@ -1,0 +1,27 @@
+spring:
+  application.name: keycloak
+
+  docker:
+    compose:
+      file: ${projectRootDir}/compose.yaml
+
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: "http://localhost:8081/realms/tutorials"
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: "tutorials-keycloak"
+            client-secret: "spring-secret"
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+      resourceserver:
+        jwt:
+          issuer-uri: "\${spring.security.oauth2.client.provider.keycloak.issuer-uri}"

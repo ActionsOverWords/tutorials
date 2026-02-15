@@ -1,0 +1,151 @@
+:root {
+  --bg-a: #fff2d8;
+  --bg-b: #d6f2ff;
+  --ink: #1f2937;
+  --card: rgba(255, 255, 255, 0.9);
+  --accent: #0f766e;
+  --accent-2: #b45309;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 15% 15%, #fff8e8 0%, transparent 40%),
+              radial-gradient(circle at 85% 85%, #d7f7ff 0%, transparent 45%),
+              linear-gradient(135deg, var(--bg-a), var(--bg-b));
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.hero,
+.panel {
+  background: var(--card);
+  border: 1px solid rgba(31, 41, 55, 0.1);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(31, 41, 55, 0.08);
+  animation: slide-up 0.5s ease-out both;
+}
+
+.hero {
+  padding: 24px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: -0.03em;
+}
+
+.hero p {
+  margin: 4px 0;
+  line-height: 1.55;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.hint {
+  margin: 8px 0 14px;
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 8px;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(31, 41, 55, 0.2);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 0.92rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #ffffff;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.buttons {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+button.primary {
+  background: var(--accent);
+}
+
+button.warn {
+  background: var(--accent-2);
+}
+
+pre {
+  margin: 12px 0 0;
+  background: #0b1220;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  overflow: auto;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  min-height: 160px;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

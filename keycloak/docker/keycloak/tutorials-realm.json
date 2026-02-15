@@ -1,0 +1,55 @@
+{
+  "realm": "tutorials",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "tutorials-keycloak",
+      "name": "Spring Boot API",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "spring-secret",
+      "serviceAccountsEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "protocolMappers": [
+        {
+          "name": "audience-tutorials-keycloak",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "tutorials-keycloak",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:8080/*"
+      },
+      "redirectUris": [
+        "http://localhost:8080/*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "app-user",
+      "enabled": true,
+      "email": "app-user@example.com",
+      "emailVerified": true,
+      "firstName": "App",
+      "lastName": "User",
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "app-user-password",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

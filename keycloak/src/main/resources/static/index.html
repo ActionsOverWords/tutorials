@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keycloak Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Keycloak Playground</h1>
+      <p>이 화면에서 두 가지 인증 방식을 실습할 수 있습니다.</p>
+      <p>1) Keycloak 리다이렉트 로그인(OIDC), 2) ID/PW로 토큰 발급 후 Bearer 호출</p>
+    </section>
+
+    <section class="panels">
+      <article class="panel">
+        <h2>Keycloak 리다이렉트 로그인</h2>
+        <p class="hint">앱이 아닌 Keycloak 로그인 페이지에서 직접 인증하고 세션으로 API를 이용합니다.</p>
+
+        <div class="buttons">
+          <button id="btn-oidc-login" type="button" class="primary">Keycloak 로그인으로 이동</button>
+          <button id="btn-logout" type="button" class="warn">POST /logout</button>
+          <button id="btn-session-status" type="button" class="primary">세션 상태 확인</button>
+        </div>
+
+        <pre id="session-result">현재 상태: 미확인</pre>
+      </article>
+
+      <article class="panel">
+        <h2>ID/PW 인증</h2>
+        <p class="hint">Keycloak 사용자 계정으로 로그인하여 토큰 정보를 확인합니다.</p>
+
+        <label for="username">Username</label>
+        <input id="username" type="text" value="app-user" />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" value="app-user-password" />
+
+        <div class="buttons">
+          <button id="btn-login" type="button" class="primary">POST /api/login/password</button>
+        </div>
+
+        <pre id="login-result">ID/PW 인증 결과가 여기에 표시됩니다.</pre>
+      </article>
+
+      <article class="panel">
+        <h2>Bearer 토큰 API 호출</h2>
+        <p class="hint">토큰 입력 시 Bearer JWT, 비워두면 세션 쿠키로 `/api/secure`를 호출합니다.</p>
+
+        <label for="token">Bearer Token</label>
+        <textarea id="token" placeholder="eyJhbGciOi... (Keycloak access token)"></textarea>
+
+        <div class="buttons">
+          <button id="btn-public" type="button" class="warn">GET /api/public</button>
+          <button id="btn-secure" type="button" class="primary">GET /api/secure</button>
+        </div>
+
+        <pre id="api-result">API 응답 결과가 여기에 표시됩니다.</pre>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
