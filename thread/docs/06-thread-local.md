@@ -1,4 +1,4 @@
-# ThreadLocal과 ScopedValue
+# ThreadLocal과 ScopedValue ([VirtualThreadTest.kt](../src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt))
 
 ## ThreadLocal 개념
 

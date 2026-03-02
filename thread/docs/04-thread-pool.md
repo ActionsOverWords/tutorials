@@ -1,4 +1,4 @@
-# Thread Pool
+# Thread Pool ([ThreadBasicTest.kt](../src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [VirtualThreadTest.kt](../src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt))
 
 ## 개념과 필요성
 

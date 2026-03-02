@@ -1,4 +1,4 @@
-# Thread 동시성 문제
+# Thread 동시성 문제 ([ThreadBasicTest.kt](../src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [SynchronizationTest.kt](../src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt))
 
 ## Race Condition (경쟁 조건)
 

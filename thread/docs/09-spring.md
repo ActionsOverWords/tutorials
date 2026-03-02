@@ -1,4 +1,4 @@
-# Spring Boot와 Thread
+# Spring Boot와 Thread ([ThreadApplicationTests.kt](../src/test/kotlin/tutorials/thread/ThreadApplicationTests.kt))
 
 ## @Async - 비동기 메서드 실행
 

@@ -1,4 +1,4 @@
-# 동기화 메커니즘
+# 동기화 메커니즘 ([SynchronizationTest.kt](../src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt))
 
 ## Mutex (Mutual Exclusion)
 

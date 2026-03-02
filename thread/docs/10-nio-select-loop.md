@@ -1,4 +1,4 @@
-# NIO Select Loop (동기 + 논블록킹)
+# NIO Select Loop ([NioSelectLoopTest.kt](../src/test/kotlin/tutorials/thread/basic/NioSelectLoopTest.kt)) (동기 + 논블록킹)
 
 ## 개요
 

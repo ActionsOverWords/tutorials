@@ -1,4 +1,4 @@
-# Thread 기본 개념
+# Thread 기본 개념 ([ThreadBasicTest.kt](../src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt))
 
 ## Thread vs Process
 
