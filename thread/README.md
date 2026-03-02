@@ -102,18 +102,18 @@
 
 ## 문서-테스트 매핑
 
-| 번호 | 문서 | 테스트 |
-|---|---|---|
-| 1 | [Thread 기본 개념](docs/01-thread-basics.md) | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt) |
-| 2 | [Thread 동시성 문제](docs/02-thread-issues.md) | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [SynchronizationTest.kt](src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt) |
-| 3 | [동기화 메커니즘](docs/03-synchronization.md) | [SynchronizationTest.kt](src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt) |
-| 4 | [Thread Pool](docs/04-thread-pool.md) | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt) |
-| 5 | [Virtual Thread](docs/05-virtual-thread.md) | [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt) |
-| 6 | [ThreadLocal과 ScopedValue](docs/06-thread-local.md) | [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt) |
-| 7 | [Concurrent Collections](docs/07-concurrent-collections.md) | [ConcurrentCollectionsTest.kt](src/test/kotlin/tutorials/thread/basic/ConcurrentCollectionsTest.kt) |
-| 8 | [Resilience4j](docs/08-resilience4j.md) | [Resilience4jTest.kt](src/test/kotlin/tutorials/thread/basic/Resilience4jTest.kt) |
-| 9 | [Spring Boot와 Thread](docs/09-spring.md) | [ThreadApplicationTests.kt](src/test/kotlin/tutorials/thread/ThreadApplicationTests.kt) |
-| 10 | [NIO Select Loop](docs/10-nio-select-loop.md) | [NioSelectLoopTest.kt](src/test/kotlin/tutorials/thread/basic/NioSelectLoopTest.kt) |
-| 11 | [Reactor (Project Reactor)](docs/11-reactor.md) | [ReactorTest.kt](src/test/kotlin/tutorials/thread/basic/ReactorTest.kt) |
-| 12 | [Spring Reactor](docs/12-spring-reactor.md) | [ReactorTest.kt](src/test/kotlin/tutorials/thread/basic/ReactorTest.kt), [ThreadApplicationTests.kt](src/test/kotlin/tutorials/thread/ThreadApplicationTests.kt) |
-| 13 | [Kotlin Coroutines](docs/13-kotlin-coroutines.md) | [CoroutineTest.kt](src/test/kotlin/tutorials/thread/basic/CoroutineTest.kt) |
+| 번호 | 문서                                                          | 테스트                                                                                                                                                                      |
+|----|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | [Thread 기본 개념](docs/01-thread-basics.md)                    | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt)                                                                                          |
+| 2  | [Thread 동시성 문제](docs/02-thread-issues.md)                   | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [SynchronizationTest.kt](src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt) |
+| 3  | [동기화 메커니즘](docs/03-synchronization.md)                      | [SynchronizationTest.kt](src/test/kotlin/tutorials/thread/basic/SynchronizationTest.kt)                                                                                  |
+| 4  | [Thread Pool](docs/04-thread-pool.md)                       | [ThreadBasicTest.kt](src/test/kotlin/tutorials/thread/basic/ThreadBasicTest.kt), [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt)     |
+| 5  | [Virtual Thread](docs/05-virtual-thread.md)                 | [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt)                                                                                      |
+| 6  | [ThreadLocal과 ScopedValue](docs/06-thread-local.md)         | [VirtualThreadTest.kt](src/test/kotlin/tutorials/thread/basic/VirtualThreadTest.kt)                                                                                      |
+| 7  | [Concurrent Collections](docs/07-concurrent-collections.md) | [ConcurrentCollectionsTest.kt](src/test/kotlin/tutorials/thread/basic/ConcurrentCollectionsTest.kt)                                                                      |
+| 8  | [Resilience4j](docs/08-resilience4j.md)                     | [Resilience4jTest.kt](src/test/kotlin/tutorials/thread/basic/Resilience4jTest.kt)                                                                                        |
+| 9  | [Spring Boot와 Thread](docs/09-spring.md)                    | [ThreadApplicationTests.kt](src/test/kotlin/tutorials/thread/ThreadApplicationTests.kt)                                                                                  |
+| 10 | [NIO Select Loop](docs/10-nio-select-loop.md)               | [NioSelectLoopTest.kt](src/test/kotlin/tutorials/thread/basic/NioSelectLoopTest.kt)                                                                                      |
+| 11 | [Reactor (Project Reactor)](docs/11-reactor.md)             | [ReactorTest.kt](src/test/kotlin/tutorials/thread/basic/ReactorTest.kt)                                                                                                  |
+| 12 | [Spring Reactor](docs/12-spring-reactor.md)                 | [ReactorTest.kt](src/test/kotlin/tutorials/thread/basic/ReactorTest.kt), [ThreadApplicationTests.kt](src/test/kotlin/tutorials/thread/ThreadApplicationTests.kt)         |
+| 13 | [Kotlin Coroutines](docs/13-kotlin-coroutines.md)           | [CoroutineTest.kt](src/test/kotlin/tutorials/thread/basic/CoroutineTest.kt)                                                                                              |
